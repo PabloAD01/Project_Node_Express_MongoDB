@@ -12,6 +12,7 @@ import {
   validateJobInput,
   validateIdParam,
 } from "../middleware/validationMiddleware.js";
+import { authenticateUser } from "../middleware/authMiddleware.js";
 
 router.route("/").get(getAllJobs).post(validateJobInput, createJobs);
 router
