@@ -33,6 +33,14 @@ export const login = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: "user logged in" });
 };
 
+export const logOut = (req, res) => {
+  res.cookie("token", "logout", {
+    httpOnly: true,
+    expires: new Date(Date.now()),
+  });
+  res.status(StatusCodes.OK).json({ msg: "user logged out" });
+};
+
 export const getUsers = async (req, res) => {
   const user = await User.find(req.body);
   res.status(StatusCodes.ACCEPTED).json({ user });
