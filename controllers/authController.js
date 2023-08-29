@@ -40,8 +40,3 @@ export const logOut = (req, res) => {
   });
   res.status(StatusCodes.OK).json({ msg: "user logged out" });
 };
-
-export const getUsers = async (req, res) => {
-  const user = await User.find(req.body);
-  res.status(StatusCodes.ACCEPTED).json({ user });
-};
