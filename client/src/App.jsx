@@ -2,7 +2,8 @@
 import React from 'react'
 import { createBrowserRouter, RouterProvider, Link} from 'react-router-dom'
 import { HomeLayout, Landing, Register, Login, DashboardLayout, Error, Admin, AddJob, Profile, Stats, AllJobs } from './pages'
-import { action as registerAction } from './pages/Register'
+import { action as registerAction } from './pages/Register';
+import { action as loginAction } from './pages/Login';
 const checkDefaultTheme =()=>{
   const isDarkTheme = localStorage.getItem("darkTheme") === "true";
   document.body.classList.toggle('dark-theme', isDarkTheme);
@@ -28,7 +29,9 @@ const router = createBrowserRouter([
       },
       {
         path:'login',
-        element: <Login/>
+        element: <Login/>,
+        action : loginAction,
+
       },
       {
         path:'dashboard',
