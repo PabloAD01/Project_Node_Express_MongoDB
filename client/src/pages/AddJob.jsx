@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormRow } from '../components';
+import { FormRow, FormRowSelect } from '../components';
 import Wrapper from '../assets/wrappers/DashboardFormPage';
 import { useOutletContext } from 'react-router-dom';
 import { JOB_STATUS, JOB_TYPE } from '../../../utils/constants';
@@ -21,6 +21,9 @@ const AddJob = () => {
         <FormRow type='text' name='company' />
         <FormRow type='text' labelText='job location' name='jobLocation' 
           defaultValue={user?.location || ''} />
+          <FormRowSelect labelText='job status' name='jobstatus' defaultValue={JOB_STATUS.PENDING} list={Object.values(JOB_STATUS)}/>
+          <FormRowSelect labelText='job type' name='jobType' defaultValue={JOB_TYPE.FULL_TIME} list={Object.values(JOB_TYPE)}/>
+
           <button type="submit" className="btn btn-block form-btn" disabled={isSubmitting}>
             {isSubmitting ? 'Submitting...' : 'submit'}
           </button>
