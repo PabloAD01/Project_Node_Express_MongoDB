@@ -11,11 +11,11 @@ const FormRowSelect = ({name, labelText, list, defaultValue = ''}) => {
             id={name} 
             className='form-select' 
             defaultValue={defaultValue} >
-              {list.map((status) => {
-                return(
+              {list.map((status) => (
+                
                 <option key={status} value={status}>{status}</option>
                 )
-                })}
+                )}
             </select>
           </div>
   )
