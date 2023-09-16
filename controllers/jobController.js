@@ -24,7 +24,7 @@ export const updateJob = async (req, res) => {
     new: true,
   });
 
-  res.status().json({ msg: "job modified successfully", updatedJob });
+  res.status(StatusCodes.OK).json({ msg: "job modified successfully", updatedJob });
 };
 
 export const deleteJob = async (req, res) => {

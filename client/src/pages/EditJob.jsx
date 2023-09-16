@@ -7,21 +7,59 @@ import { Form, useNavigation, redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import customFetch from '../utils/customFetch';
 
-export const loader = ({params}) => {
-  console.log(params);
-    return null
+export const loader = async ({params}) => {
+  try {
+    const {data} = await customFetch.get(`/jobs/${params.id}`);
+    return data
+  } catch (err) {
+   toast.error(err?.response?.data?.msg); 
+   return redirect("/dashboard/all-jobs");
+  }
 }
 
-export const action = () => {
-  return null
+export const action = async ({request, params}) => {
+  const formData = await request.formData();
+  const data = Object.fromEntries(formData);
+  try{
+    await customFetch.patch(`/jobs/${params.id}`, data);
+    toast.success('Job updated successfully')
+    return redirect('/dashboard/all-jobs')
+  }catch(err){
+    toast.error(err?.response?.data?.msg)
+    return err
+  }
+  
+  
 }
 
 
 
 const EditJob = () => {
-  const params = useParams();
+  const {job} = useLoaderData();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === 'submitting';
+  
   return (
-    <h1>EditJob</h1>
+    <Wrapper>
+      <Form method='post' className='form'>
+        <h4 className='form-title'>edit job</h4>
+        <div className='form-center'>
+          <FormRow type='text' name='position' defaultValue={job?.position} />
+          <FormRow type='text' name='company' defaultValue={job?.company} />
+          <FormRow 
+            type='text' 
+            labelText='job location' 
+            name='jobLocation' 
+            defaultValue={job?.jobLocation} />
+          <FormRowSelect labelText='job status' name='jobStatus' defaultValue={job?.jobStatus} list={Object.values(JOB_STATUS)} />
+          <FormRowSelect labelText='job type' name='jobType' defaultValue={job?.jobType} list={Object.values(JOB_TYPE)} />
+          <button type="submit" className="btn btn-block form-btn" disabled={isSubmitting}>
+            {isSubmitting ? 'Submitting...' : 'submit'}
+            </button>
+          
+        </div>
+      </Form>
+    </Wrapper>
   )
 }
 
