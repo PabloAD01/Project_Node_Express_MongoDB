@@ -8,19 +8,13 @@ import {toast} from 'react-toastify';
 export const action = async ({ request }) => {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  const errors = {msg:''}
-  if (data.password.length < 3) {
-    errors.msg = 'Password must be at least 3 characters'
-    return errors
-  }
   try {
     await customFetch.post('/auth/login', data);
     toast.success(`User successfully logged in as ${data.email}`)
     return redirect('/dashboard')
   } catch (error) {
-/*   toast.error(err?.response?.data?.msg) */
-    errors.msg = error.response.data.msg
-    return errors
+  toast.error(error?.response?.data?.msg)
+    return error
   }
   
 
@@ -32,12 +26,12 @@ const Login = () => {
 
   const loginDemoUser = async () =>{
     const data = {
-      email: 'pablo@gmail.com',
-      password: 'pablo123'
+      email: 'pedro@pedro.com',
+      password: 'secret123'
     }
     try {
       await customFetch.post('/auth/login', data);
-    toast.success(`User successfully logged in as ${data.email}`)
+    toast.success("Logged in as a Test User")
     navigate('/dashboard')
       
     } catch (error) {
@@ -52,9 +46,11 @@ const Login = () => {
       {errors?.msg && <p style={{color:'red'}}>{errors.msg}</p>}
       <p></p>
       <FormRow type="email" name="email" defaultValue="pablo@gmail.com"/>
-      <FormRow type="password" name="password" defaultValue="password123"/>
+      <FormRow type="password" name="password" defaultValue="secret123"/>
       <SubmitBtn/> 
-      <button type='button' className='btn btn-block' onClick={loginDemoUser} >Explore the App</button>
+      <button type='button' className='btn btn-block' onClick={loginDemoUser} >
+        Explore the App
+        </button>
       <p>
           Not a member yet?
           <Link to="/register" className="member-btn">
