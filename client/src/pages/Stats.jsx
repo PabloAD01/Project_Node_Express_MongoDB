@@ -6,7 +6,6 @@ import { ChartsContainer, StatsContainer } from '../components'
 export const loader = async () => {
   try {
     const response = await customFetch.get('/jobs/stats')
-    console.log(response.data)
     return response.data
   } catch (error) {
     return error
