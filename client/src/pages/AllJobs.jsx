@@ -1,35 +1,40 @@
-import React from 'react'
-import { toast } from 'react-toastify';
-import { JobsContainer, SearchContainer } from '../components';
-import customFetch from '../utils/customFetch';
-import { useLoaderData } from 'react-router-dom';
-import { useContext, createContext } from 'react';
+import React from "react";
+import { toast } from "react-toastify";
+import { JobsContainer, SearchContainer } from "../components";
+import customFetch from "../utils/customFetch";
+import { useLoaderData } from "react-router-dom";
+import { useContext, createContext } from "react";
 
-export const loader = async () => {
+export const loader = async ({ request }) => {
+  console.log(request.url);
+  const params = Object.fromEntries([
+    ...new URL(request.url).searchParams.entries(),
+  ]);
+  console.log(params);
   try {
-    const {data} = await customFetch.get('/jobs')
-    return {data}
+    const { data } = await customFetch.get("/jobs",{
+      params
+    });
+    return { data, searchValues:{...params} };
   } catch (err) {
-    toast.error(err?.response?.data?.msg)
-    return err
+    toast.error(err?.response?.data?.msg);
+    return err;
   }
+};
 
-}
-
-const AllJobsContext = createContext()
-
+const AllJobsContext = createContext();
 
 const AllJobs = () => {
-  const {data} = useLoaderData();
+  const { data, searchValues } = useLoaderData();
 
   return (
-    <AllJobsContext.Provider value={{data}}>
-    <SearchContainer/>
-    <JobsContainer/>
+    <AllJobsContext.Provider value={{ data, searchValues }}>
+      <SearchContainer />
+      <JobsContainer />
     </AllJobsContext.Provider>
-  )
-}
+  );
+};
 
-export const useAllJobsContext = () => useContext(AllJobsContext)
+export const useAllJobsContext = () => useContext(AllJobsContext);
 
-export default AllJobs
+export default AllJobs;

@@ -107,7 +107,7 @@ export const validateUserInput = withValidationErrors([
       }
     }),
 
-  body("location").notEmpty().withMessage("password is required"),
-  body("lastName").notEmpty().withMessage("password is required"),
+  body("location").notEmpty().withMessage("location is required"),
+  body("lastName").notEmpty().withMessage("last name is required"),
 ]);
 
