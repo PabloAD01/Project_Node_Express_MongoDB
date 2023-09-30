@@ -10,7 +10,6 @@ export const loader = async ({ request }) => {
   const params = Object.fromEntries([
     ...new URL(request.url).searchParams.entries(),
   ]);
-  console.log(params);
   try {
     const { data } = await customFetch.get("/jobs",{
       params
