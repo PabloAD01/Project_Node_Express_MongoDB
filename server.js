@@ -34,13 +34,36 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
-app.use(express.static(path.resolve(__dirname, './public'))); 
-app.use(cookieParser());
-app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Welcome");
-});
+
+app.use(express.static(path.resolve(__dirname, './client/dist'))); 
+
+/*
+Se utiliza para servir archivos estáticos, como archivos CSS, imágenes, 
+scripts del lado del cliente, etc., desde un directorio específico en el servidor. 
+
+Se especifica un directorio en el servidor que contiene los archivos estáticos que deseas servir. 
+Estos archivos se vuelven accesibles a través de las rutas especificadas en el cliente. 
+*/
+
+
+app.use(cookieParser());
+/*
+Express puede interpretar las cookies enviadas 
+por el cliente en las solicitudes HTTP entrantes y 
+hacer que la información contenida en esas cookies 
+sea fácilmente accesible en el objeto req.cookies.
+*/
+
+
+
+app.use(express.json());
+/*
+Se utiliza para analizar el cuerpo de las solicitudes HTTP 
+entrantes que tienen un formato JSON.
+Toma los datos JSON enviados por el cliente en el cuerpo de la solicitud 
+y los convierte en un objeto JavaScript para que puedan ser utilizados en el servidor.
+*/
 
 app.get("/api/v1/test", (req, res) => {
   res.json({ msg: "Test route" });
@@ -49,17 +72,16 @@ app.get("/api/v1/test", (req, res) => {
 app.use("/api/v1/jobs", authenticateUser, jobRouter);
 app.use("/api/v1/users", authenticateUser, userRouter);
 app.use("/api/v1/auth", authRouter);
-
-app.get("*", (req,res) => {
-  res.sendFile(path.resolve(__dirname, "./public", "index.html"));
-})
-
-
-app.use("*", (req, res) => {
-  res.status(404).json({ msg: "not found" });
+app.use("/api/*", (req, res) => {
+  res.status(404).json({ msg: "API endpoint not found" });
 });
 
+app.get("*", (req,res) => {
+  res.sendFile(path.resolve(__dirname, "./client/dist", "index.html"));
+})
+
 app.use(errorHandlerMiddleware);
+
 
 const port = process.env.PORT || 5100;
 
