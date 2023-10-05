@@ -7,6 +7,8 @@ import morgan from "morgan";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import cloudinary from 'cloudinary';
+import helmet from "helmet";
+import ExpressMongoSanitize from "express-mongo-sanitize";
 
 
 //routers
@@ -64,10 +66,9 @@ entrantes que tienen un formato JSON.
 Toma los datos JSON enviados por el cliente en el cuerpo de la solicitud 
 y los convierte en un objeto JavaScript para que puedan ser utilizados en el servidor.
 */
+app.use(helmet());
+app.use(ExpressMongoSanitize());
 
-app.get("/api/v1/test", (req, res) => {
-  res.json({ msg: "Test route" });
-});
 
 app.use("/api/v1/jobs", authenticateUser, jobRouter);
 app.use("/api/v1/users", authenticateUser, userRouter);
